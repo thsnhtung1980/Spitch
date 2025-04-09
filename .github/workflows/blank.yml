@@ -1,0 +1,23 @@
+name: Unzip MyProject
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Unzip project
+      run: unzip MyProject.zip -d project
+
+    - name: List extracted files
+      run: ls -R project
