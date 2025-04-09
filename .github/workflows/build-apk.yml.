@@ -3,7 +3,7 @@ name: Build APK from ZIP
 on:
   push:
     branches:
-      - main  # Chạy khi push lên nhánh main
+      - main
 
 jobs:
   build:
@@ -19,15 +19,20 @@ jobs:
         java-version: '17'
 
     - name: Unzip project
-      run: unzip MyProject.zip -d project  # Giải nén file ZIP (thay MyProject.zip bằng tên file của bạn)
+      run: unzip MyProject.zip -d project
+
+    - name: Copy Gradle files
+      run: |
+        cp build.gradle project/build.gradle
+        cp settings.gradle project/settings.gradle
 
     - name: Grant execute permission for gradlew
-      run: chmod +x project/gradlew  # Cấp quyền cho gradlew (nếu có trong ZIP)
+      run: chmod +x project/gradlew
 
-    - name: Build with Gradle
-      run: cd project && ./gradlew assembleDebug  # Build APK từ thư mục đã giải nén
+    - name: Build Debug APK
+      run: cd project && ./gradlew assembleDebug
 
-    - name: Upload APK
+    - name: Upload Debug APK
       uses: actions/upload-artifact@v3
       with:
         name: app-debug.apk
